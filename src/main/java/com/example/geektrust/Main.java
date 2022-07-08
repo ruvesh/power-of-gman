@@ -49,6 +49,7 @@ public class Main {
                     turns++;
                     break;
                 case "E":
+                    turns++;
                     break;
                 case "S":                    
                     turns++;
@@ -72,6 +73,7 @@ public class Main {
                     turns++;
                     break;
                 case "W":
+                    turns++;
                     break;
                 default:
                     break;
@@ -79,10 +81,11 @@ public class Main {
         }
         if (dY == sY){
         }        
-        else if (dY > sY){                        
+        else if (dY < sY){
             yt = dY - sY;   
             switch (dir) {
                 case "N":
+                    turns++;
                     break;
                 case "E":
                     turns++;
@@ -106,6 +109,7 @@ public class Main {
                     turns++;
                     break;
                 case "S":
+                    turns++;
                     break;
                 case "W":
                     turns++;
@@ -115,7 +119,7 @@ public class Main {
             }                                       
         }                                                                           
         tot = xt+yt;                        
-        r = 200 - ((tot*10) +(turns*5) );
+        r = 200 - ((tot*10) -(turns*5)) ;
         return r;
     }
 }
