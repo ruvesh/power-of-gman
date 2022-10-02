@@ -1,6 +1,7 @@
 package io.github.ruvesh.powerofgman.service;
 
 import io.github.ruvesh.powerofgman.common.constant.Directions;
+import io.github.ruvesh.powerofgman.common.constant.StringConstants;
 import io.github.ruvesh.powerofgman.service.model.ConsumptionCostModel;
 import io.github.ruvesh.powerofgman.service.model.Coordinate;
 
@@ -64,17 +65,46 @@ public class PowerConsumptionEvaluator implements ConsumptionEvaluator{
         int sourceY = sourceCoordinate.getY();
         int destinationX = destinationCoordinate.getX();
         int destinationY = destinationCoordinate.getY();
-        String skipTurnDirection = "";
-        if(sourceX != destinationX) {
+        String skipTurnDirection;
+        if(sourceX == destinationX) {
+            turns += calculate180DegreeTurn(sourceY, destinationY, directionFacing, StringConstants.Y_AXIS);
+        }
+        else {
             skipTurnDirection = sourceX > destinationX ? Directions.WEST.getLabel() : Directions.EAST.getLabel();
             if(!directionFacing.equalsIgnoreCase(skipTurnDirection))
                 turns++;
         }
-        if(sourceY != destinationY) {
+        if(sourceY == destinationY) {
+            turns += calculate180DegreeTurn(sourceX, destinationX, directionFacing, StringConstants.X_AXIS);
+        }
+        else {
             skipTurnDirection = sourceY > destinationY ? Directions.SOUTH.getLabel() : Directions.NORTH.getLabel();
             if(!directionFacing.equalsIgnoreCase(skipTurnDirection))
                 turns++;
         }
         return turns;
+    }
+
+    /**
+     * Finds whether a double turn was made
+     * @param sourceCoordinate initial x or y coordinate of GMan
+     * @param destinationCoordinate final x or y coordinate of GMan
+     * @param directionFacing initial direction in which GMan is facing
+     * @return 0 if 180 turn is not required <br/> 1 if 180 turn is required
+     */
+    private int calculate180DegreeTurn(int sourceCoordinate, int destinationCoordinate, String directionFacing, String axis) {
+        switch (axis){
+            case StringConstants.X_AXIS:
+                if ((destinationCoordinate > sourceCoordinate) && directionFacing.equalsIgnoreCase(Directions.WEST.getLabel())
+                        || (destinationCoordinate < sourceCoordinate) && directionFacing.equalsIgnoreCase(Directions.EAST.getLabel()))
+                    return 1;
+                return 0;
+            case StringConstants.Y_AXIS:
+                if ((destinationCoordinate > sourceCoordinate) && directionFacing.equalsIgnoreCase(Directions.SOUTH.getLabel())
+                                || (destinationCoordinate < sourceCoordinate) && directionFacing.equalsIgnoreCase(Directions.NORTH.getLabel()))
+                    return 1;
+                return 0;
+            default: return 0;
+        }
     }
 }

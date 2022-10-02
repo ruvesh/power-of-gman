@@ -17,4 +17,6 @@ public final class StringConstants {
     public static final String PRINT_POWER = "PRINT_POWER";
     public static final String SPACE = " ";
     public static final String POWER = "POWER";
+    public static final String X_AXIS = "X_AXIS";
+    public static final String Y_AXIS = "Y_AXIS";
 }

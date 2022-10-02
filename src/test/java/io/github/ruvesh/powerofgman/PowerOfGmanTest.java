@@ -66,5 +66,19 @@ class PowerOfGmanTest {
                 outputStreamCaptor.toString().trim());
     }
 
+    @Test
+    void testCase6() {
+        PowerOfGman.main(new String[]{"src/test/resources/sample_input/input6.txt"});
+        assertEquals("POWER 180",
+                outputStreamCaptor.toString().trim());
+    }
+
+    @Test
+    void testCase7() {
+        PowerOfGman.main(new String[]{"src/test/resources/sample_input/input7.txt"});
+        assertEquals("POWER 170",
+                outputStreamCaptor.toString().trim());
+    }
+
 
 }
