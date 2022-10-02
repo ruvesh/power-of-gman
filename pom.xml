@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.example</groupId>
-    <artifactId>geektrust</artifactId>
+    <groupId>io.github.ruvesh</groupId>
+    <artifactId>powerofgman</artifactId>
     <version>1.0</version>
     <dependencies>
         <dependency>
@@ -49,7 +49,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <!-- This is the main class of your program which will be executed-->
-                            <mainClass>com.example.geektrust.Main</mainClass>
+                            <mainClass>io.github.ruvesh.powerofgman.PowerOfGman</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
