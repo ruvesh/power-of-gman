@@ -6,9 +6,12 @@ import io.github.ruvesh.powerofgman.entity.GMan;
 import io.github.ruvesh.powerofgman.service.ConsumptionEvaluator;
 import io.github.ruvesh.powerofgman.service.PowerConsumptionEvaluator;
 import io.github.ruvesh.powerofgman.service.model.Coordinate;
+import io.github.ruvesh.powerofgman.service.model.GManTrajectory;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -19,25 +22,30 @@ import java.util.Scanner;
  */
 public class DriverCodeUtil {
 
-    /**
-     * Do not allow instance creation
-     */
     private DriverCodeUtil() {
     }
 
-    /**
-     * Reads inputs from provided input file and processes the result
-     *
-     * @param filePath             the path to the sample input file
-     * @param consumptionCostModel holds information about the parameters of consumption cost for the character's moves
-     */
-    public static void readInputsAndProcessResults(String filePath, ConsumptionCostModel consumptionCostModel) throws IOException{
-        GMan gMan = new GMan();
+    public static List<String> readInputs(String filePath) throws IOException{
         FileInputStream fis = new FileInputStream(filePath);
         Scanner sc = new Scanner(fis);
+        List<String> inputLines = new ArrayList<>();
         while (sc.hasNextLine()) {
-            String input = sc.nextLine();
-            String[] cmd = input.split(StringConstants.SPACE);
+            inputLines.add(sc.nextLine());
+        }
+        sc.close();
+        return inputLines;
+    }
+
+    private static int calculateRemainingPower(GMan gMan, ConsumptionCostModel consumptionCostModel) {
+        ConsumptionEvaluator powerConsumptionEvaluator = new PowerConsumptionEvaluator();
+        GManTrajectory gManTrajectory = new GManTrajectory(gMan.getSourceCoordinate(), gMan.getDestinationCoordinate(), gMan.getDirectionFacing(), consumptionCostModel);
+        return consumptionCostModel.getTotalPower() - powerConsumptionEvaluator.evaluateConsumption(gManTrajectory);
+    }
+
+    public static void processResults(List<String> inputs, ConsumptionCostModel consumptionCostModel) {
+        GMan gMan = new GMan();
+        for(String inputLine: inputs) {
+            String[] cmd = inputLine.split(StringConstants.SPACE);
             switch (cmd[0]) {
                 case StringConstants.SOURCE:
                     Coordinate sourceCoordinate = new Coordinate(Integer.parseInt(cmd[1]), Integer.parseInt(cmd[2]));
@@ -56,19 +64,5 @@ public class DriverCodeUtil {
                     break;
             }
         }
-        sc.close();
     }
-
-    /**
-     * Calculates the remaining power after the moves are made as per the inputs provided
-     *
-     * @param gMan                 represents the details of the characters current position, direction and destination position
-     * @param consumptionCostModel holds information about the parameters of consumption cost for the character's moves
-     * @return remaining power after the moves are made
-     */
-    private static int calculateRemainingPower(GMan gMan, ConsumptionCostModel consumptionCostModel) {
-        ConsumptionEvaluator powerConsumptionEvaluator = new PowerConsumptionEvaluator();
-        return consumptionCostModel.getTotalPower() - powerConsumptionEvaluator.evaluateConsumption(gMan.getSourceCoordinate(), gMan.getDestinationCoordinate(), gMan.getDirectionFacing(), consumptionCostModel);
-    }
-
 }

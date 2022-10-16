@@ -12,47 +12,27 @@ public class GMan {
     private Coordinate destinationCoordinate;
     private String directionFacing;
 
-    /**
-     * Getter for {@link #sourceCoordinate}
-     * @return {@link Coordinate}
-     */
+
     public Coordinate getSourceCoordinate() {
         return this.sourceCoordinate;
     }
 
-    /**
-     * Setter for {@link #sourceCoordinate}
-     */
     public void setSourceCoordinate(Coordinate sourceCoordinate) {
         this.sourceCoordinate = sourceCoordinate;
     }
 
-    /**
-     * Getter for {@link #destinationCoordinate}
-     * @return {@link Coordinate}
-     */
     public Coordinate getDestinationCoordinate() {
         return this.destinationCoordinate;
     }
 
-    /**
-     * Setter for {@link #destinationCoordinate}
-     */
     public void setDestinationCoordinate(Coordinate destinationCoordinate) {
         this.destinationCoordinate = destinationCoordinate;
     }
 
-    /**
-     * Getter for {@link #directionFacing}
-     * @return {@link String}
-     */
     public String getDirectionFacing() {
         return directionFacing;
     }
 
-    /**
-     * Setter for {@link #directionFacing}
-     */
     public void setDirectionFacing(String directionFacing) {
         this.directionFacing = directionFacing;
     }

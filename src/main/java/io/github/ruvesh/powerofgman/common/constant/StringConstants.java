@@ -7,9 +7,6 @@ package io.github.ruvesh.powerofgman.common.constant;
  */
 public final class StringConstants {
 
-    /**
-     * Do Not allow instance creation
-     */
     private StringConstants(){}
 
     public static final String SOURCE = "SOURCE";

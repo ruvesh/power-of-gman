@@ -2,8 +2,8 @@ package io.github.ruvesh.powerofgman.service;
 
 import io.github.ruvesh.powerofgman.common.constant.Directions;
 import io.github.ruvesh.powerofgman.common.constant.StringConstants;
-import io.github.ruvesh.powerofgman.service.model.ConsumptionCostModel;
 import io.github.ruvesh.powerofgman.service.model.Coordinate;
+import io.github.ruvesh.powerofgman.service.model.GManTrajectory;
 
 /**
  * Implementation for Evaluation of GMan's power consumption
@@ -15,57 +15,32 @@ public class PowerConsumptionEvaluator implements ConsumptionEvaluator{
     private int distanceTravelledX;
     private int distanceTravelledY;
 
-    /**
-     * Evaluates the power consumption made by GMan's moves
-     * @param sourceCoordinate initial position of GMan
-     * @param destinationCoordinate final position of GMan
-     * @param directionFacing initial direction in which GMan is facing
-     * @param consumptionCostModel consumption cost parameters for GMan's moves
-     * @return the total power consumed by GMan
-     */
     @Override
-    public int evaluateConsumption(Coordinate sourceCoordinate, Coordinate destinationCoordinate, String directionFacing, ConsumptionCostModel consumptionCostModel) {
-        int totalTravelCost = calculateTotalTravelCost(sourceCoordinate, destinationCoordinate, consumptionCostModel.getTravellingCost());
-        int totalTurningCost = consumptionCostModel.getTurningCost() * calculateNoOfTurns(sourceCoordinate, destinationCoordinate, directionFacing);
+    public int evaluateConsumption(GManTrajectory gManTrajectory) {
+        int totalTravelCost = calculateTotalTravelCost(gManTrajectory);
+        int totalTurningCost = gManTrajectory.getConsumptionCostModel().getTurningCost() * calculateNoOfTurns(gManTrajectory);
         return (totalTravelCost + totalTurningCost);
     }
 
-    /**
-     * Evaluates the total cost of travelling from source to destination
-     * @param sourceCoordinate initial position of GMan
-     * @param destinationCoordinate final position of GMan
-     * @param travellingCost cost for making one move towards an adjacent coordinate
-     * @return total cost of travelling from source to destination
-     */
-    private int calculateTotalTravelCost(Coordinate sourceCoordinate, Coordinate destinationCoordinate, int travellingCost){
-        calculateDistanceTravelled(sourceCoordinate, destinationCoordinate);
-        return (distanceTravelledX + distanceTravelledY) * travellingCost;
+    private int calculateTotalTravelCost(GManTrajectory gManTrajectory){
+        calculateDistanceTravelled(gManTrajectory.getSource(), gManTrajectory.getDestination());
+        return (distanceTravelledX + distanceTravelledY) * gManTrajectory.getConsumptionCostModel().getTravellingCost();
     }
 
-    /**
-     * Evaluates the total distance travelled by GMan from source to destination
-     * @param sourceCoordinate initial position of GMan
-     * @param destinationCoordinate final position of GMan
-     */
+
     private void calculateDistanceTravelled(Coordinate sourceCoordinate, Coordinate destinationCoordinate){
         distanceTravelledX = Math.abs(sourceCoordinate.getX() - destinationCoordinate.getX());
         distanceTravelledY = Math.abs(sourceCoordinate.getY() - destinationCoordinate.getY());
     }
 
-    /**
-     * Evaluates the number of turns taken by GMan to reach the destination
-     * @param sourceCoordinate initial position of GMan
-     * @param destinationCoordinate final position of GMan
-     * @param directionFacing initial direction in which GMan is facing
-     * @return number of turns made by GMan
-     */
-    private int calculateNoOfTurns(Coordinate sourceCoordinate, Coordinate destinationCoordinate, String directionFacing){
+    private int calculateNoOfTurns(GManTrajectory gManTrajectory){
         int turns = 0;
-        int sourceX = sourceCoordinate.getX();
-        int sourceY = sourceCoordinate.getY();
-        int destinationX = destinationCoordinate.getX();
-        int destinationY = destinationCoordinate.getY();
+        int sourceX = gManTrajectory.getSource().getX();
+        int sourceY = gManTrajectory.getSource().getY();
+        int destinationX = gManTrajectory.getDestination().getX();
+        int destinationY = gManTrajectory.getDestination().getY();
         String skipTurnDirection;
+        String directionFacing = gManTrajectory.getCurrentDirection();
         if(sourceX == destinationX) {
             turns += calculate180DegreeTurn(sourceY, destinationY, directionFacing, StringConstants.Y_AXIS);
         }
@@ -85,13 +60,7 @@ public class PowerConsumptionEvaluator implements ConsumptionEvaluator{
         return turns;
     }
 
-    /**
-     * Finds whether a double turn was made
-     * @param sourceCoordinate initial x or y coordinate of GMan
-     * @param destinationCoordinate final x or y coordinate of GMan
-     * @param directionFacing initial direction in which GMan is facing
-     * @return 0 if 180 turn is not required <br/> 1 if 180 turn is required
-     */
+
     private int calculate180DegreeTurn(int sourceCoordinate, int destinationCoordinate, String directionFacing, String axis) {
         switch (axis){
             case StringConstants.X_AXIS:
